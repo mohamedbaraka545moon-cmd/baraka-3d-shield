@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARAKA-3D Zero Identity Shield (BZIS) Enterprise</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <script src="https://cloudflare.com"></script>
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        :root {
+            --bg-dark: #02040a;
+            --card-bg: rgba(15, 23, 42, 0.72);
+            --cyan: #38bdf8;
+            --indigo: #818cf8;
+            --emerald: #10b981;
+            --crimson: #f43f5e;
+            --border: rgba(56, 189, 248, 0.25);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.09) 0%, transparent 45%);
+            color: #f8fafc;
+            font-family: 'Cairo', sans-serif;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .hero {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(2, 6, 23, 0.98) 100%);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 36px 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.75);
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: var(--cyan);
+            padding: 5px 16px;
+            border-radius: 999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-family: 'Space Grotesk', 'Cairo', sans-serif;
+            font-size: 36px;
+            margin: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stage-wrapper {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            background: radial-gradient(ellipse at center, #0b132b 0%, #02040a 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+        }
+        .hud-top {
+            position: absolute; top: 16px; left: 16px; right: 16px;
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+            z-index: 10; pointer-events: none; font-family: 'JetBrains Mono', monospace;
+        }
+        .hud-box {
+            background: rgba(6, 11, 25, 0.8); backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 16px; border-radius: 12px;
+        }
+        .tabs { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+        .tab-btn {
+            background: var(--card-bg); border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #94a3b8; padding: 12px 22px; border-radius: 12px; cursor: pointer;
+            font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 15px; transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            color: white; border-color: var(--cyan);
+        }
+        .panel {
+            display: none; background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--border); border-radius: 18px; padding: 28px;
+        }
+        .panel.active { display: block; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        label { display: block; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; font-size: 14px; }
+        input[type="text"], input[type="number"], input[type="password"], input[type="file"] {
+            width: 100%; padding: 12px; background: #0b1120; border: 1px solid #334155;
+            border-radius: 10px; color: #f8fafc; font-family: 'JetBrains Mono', 'Cairo', sans-serif;
+            margin-bottom: 16px;
+        }
+        .btn-action {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+            color: white; font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 16px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-action:hover { opacity: 0.92; transform: translateY(-2px); }
+        .btn-secondary {
+            width: 100%; padding: 10px; border: 1px solid var(--cyan); border-radius: 10px;
+            background: rgba(56, 189, 248, 0.12); color: var(--cyan);
+            font-family: 'Cairo', sans-serif; font-weight: 600; cursor: pointer; margin-bottom: 16px;
+        }
+        .status-box {
+            background: #060b19; border: 1px dashed #334155; border-radius: 14px;
+            padding: 20px; min-height: 200px;
+        }
+        .download-btn {
+            display: inline-block; margin-top: 14px; padding: 12px 20px;
+            background: var(--emerald); color: #020617; font-weight: 800;
+            text-decoration: none; border-radius: 10px; font-size: 14px;
+        }
+        .footer {
+            margin-top: 36px; padding-top: 20px; border-top: 1px solid #1e293b;
+            text-align: center; color: #64748b; font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <div class="badge">◈ THE FORBIDDEN SPACE HYPOTHESIS • QUANTUM CHAOS ENGINE</div>
+        <h1>BARAKA-3D Zero Identity Shield (BZIS)</h1>
+        <p style="max-width: 800px; margin: 12px auto 0; color: #94a3b8;">
+            منظومة التشفير الفضائي-الزمني المعتمدة على <strong>مسألة الثلاث أجسام</strong> و<strong>تأثير الفراشة</strong> عند قمم الأعداد الأولية لتحقيق انعدام التكرار الإحصائي (<strong>R = 0.0000</strong>).
+        </p>
+    </div>
+
+    <!-- مسرح المحاكاة ثلاثي الأبعاد -->
+    <div class="stage-wrapper">
+        <div class="hud-top">
+            <div class="hud-box">
+                <div style="color: #38bdf8; font-weight: bold; font-size: 13px;">● LIVE 3-BODY CHAOTIC MANIFOLD</div>
+                <div style="color: #94a3b8; font-size: 11px;">Drag to Orbit 360° • Scroll to Zoom</div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="hud-box" style="text-align: center;">
+                    <div style="font-size: 10px; color: #94a3b8;">REPETITION COEFF</div>
+                    <div style="color: #10b981; font-weight: bold; font-size: 15px;">R = 0.0000</div>
+                </div>
+                <div class="hud-box" style="text-align: center;">
+                    <div style="font-size: 10px; color: #94a3b8;">LYAPUNOV EXP</div>
+                    <div style="color: #f43f5e; font-weight: bold; font-size: 15px;">λ = +3.1415</div>
+                </div>
+            </div>
+        </div>
+        <div id="three-stage" style="width: 100%; height: 100%;"></div>
+    </div>
+
+    <!-- التبويبات -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('enc', this)">🔒 تشفير الملفات (Encrypt)</button>
+        <button class="tab-btn" onclick="switchTab('dec', this)">🔓 فك التشفير والاستعادة (Decrypt)</button>
+        <button class="tab-btn" onclick="switchTab('lab', this)">🦋 مختبر تأثير الفراشة (Butterfly Lab)</button>
+        <button class="tab-btn" onclick="switchTab('guide', this)">📖 دليل الاستخدام والمرجع</button>
+    </div>
+
+    <!-- تبويب التشفير -->
+    <div id="tab-enc" class="panel active">
+        <div class="grid-2">
+            <div>
+                <label>1. ارفع أي ملف للتشفير (مستند، صورة، فيديو، كود...)</label>
+                <input type="file" id="enc-file">
+                <button class="btn-secondary" onclick="generate3DKey()">🌌 التقاط إحداثيات من الفضاء 3D لتوليد مفتاح عشوائي</button>
+                <div id="snap-info" style="font-size: 12px; color: #38bdf8; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace;"></div>
+                <div class="grid-2" style="gap: 12px;">
+                    <div>
+                        <label>2. المتغير الزمني (t)</label>
+                        <input type="number" id="enc-t" value="17.429" step="0.0001">
+                    </div>
+                    <div>
+                        <label>3. التدمير الذاتي (دقائق، 0 = دائم)</label>
+                        <input type="number" id="enc-ttl" value="0" min="0">
+                    </div>
+                </div>
+                <label>4. مفتاح الأمان السري (Secret Key)</label>
+                <input type="text" id="enc-key" placeholder="أدخل مفتاح التشفير السري...">
+                <button class="btn-action" onclick="processEncryption()">🚀 تشفير وإسقاط في الفضاء ثلاثي الأبعاد</button>
+            </div>
+            <div class="status-box" id="enc-status">
+                <div style="color: #64748b; text-align: center; padding-top: 60px;">
+                    بانتظار رفع الملف لإجراء الفحص الإحصائي وتوليد حاوية .bzis المشفرة...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- تبويب فك التشفير -->
+    <div id="tab-dec" class="panel">
+        <div class="grid-2">
+            <div>
+                <label>1. ارفع الملف المشفر بصيغة (.bzis)</label>
+                <input type="file" id="dec-file" accept=".bzis,.json">
+
+          
